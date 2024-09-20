@@ -1,4 +1,5 @@
 const Evento = require('../Models/eventoModel');
+const Participante = require ('../Models/participantesModel');
 const EventoController = {
     create: async (req, res) => {
         try {
@@ -49,7 +50,7 @@ const EventoController = {
     
     getAll: async(req, res) => {
         try {
-            const eventos = await Event.findAll();
+            const eventos = await Evento.findAll();
             return res.status(200).json({
                 msg: 'Eventos encontrados',
                 eventos
@@ -65,7 +66,7 @@ const EventoController = {
     getOne: async (req, res) => {
         try {
             const {id} = req.params;
-            const eventoEncontrado = await Event.findByPk(id);
+            const eventoEncontrado = await Evento.findByPk(id);
             if (eventoEncontrado === null) {
                 return res.status(404).json({
                     msg: 'Evento não encontrado'
@@ -86,26 +87,31 @@ const EventoController = {
 
     delete: async (req, res) => {
         try {
-            const {id} = req.params;
-            const eventFinded = await Event.findByPk(id);
-
-            if (eventFinded === null) {
+            const { id } = req.params;
+            const eventFound = await Evento.findByPk(id);
+            if (eventFound === null) {
                 return res.status(404).json({
                     msg: 'Evento não encontrado'
                 });
             }
-
-            await eventFinded.destroy();
-
+            await Participante.destroy({
+                where: { eventoId: id }
+            });
+    
+            await Evento.destroy({
+                where: { id: id } 
+            });
+           
             return res.status(200).json({
                 msg: 'Evento deletado com sucesso!'
             });
         } catch (error) {
             console.error(error);
             return res.status(500).json({
-              msg: 'Acione o suporte.'
+                msg: 'Acione o suporte.'
             });
         }
     }
+    
 };
 module.exports = EventoController;

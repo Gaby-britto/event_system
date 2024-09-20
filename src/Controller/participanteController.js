@@ -97,6 +97,8 @@ const ParticipanteController = {
         });
       }
 
+      await participanteFinded.destroy();
+
       return res.status(200).json({
         msg: "Participante excluído com sucesso!",
       });
