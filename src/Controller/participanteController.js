@@ -1,10 +1,10 @@
-const Partcipante = require("../Models/participantesModel");
+const Participante = require("../Models/participantesModel");
 
 const ParticipanteController = {
   create: async (req, res) => {
     try {
       const { nome, email, eventoId } = req.body;
-      const participanteCriado = await Partcipante.create({
+      const participanteCriado = await Participante.create({
         nome,
         email,
         eventoId,
@@ -26,7 +26,7 @@ const ParticipanteController = {
     const { nome, email, eventoId } = req.body;
 
     try {
-      const particianteUpdate = await Partcipante.findByPk(id);
+      const particianteUpdate = await Participante.findByPk(id);
       if (particianteUpdate === null) {
         return res.status(404).json({
           msg: "Participante não encontrado",
@@ -52,7 +52,7 @@ const ParticipanteController = {
   },
   getAll: async (req, res) => {
     try {
-      const participantes = await Partcipante.findAll();
+      const participantes = await Participante.findAll();
       return res.status(200).json({
         msg: "Participantes encontrados com sucesso",
         participantes,
@@ -68,7 +68,7 @@ const ParticipanteController = {
   getOne: async (req, res) => {
     try {
       const { id } = req.params;
-      const participanteEncontrado = await Partcipante.findByPk(id);
+      const participanteEncontrado = await Participante.findByPk(id);
       if (participanteEncontrado === null) {
         return res.status(404).json({
           msg: "Participante não encontrado!",
@@ -89,7 +89,7 @@ const ParticipanteController = {
   delete: async (req, res) => {
     try {
       const { id } = req.params;
-      const participanteFinded = await Partcipante.findByPk(id);
+      const participanteFinded = await Participante.findByPk(id);
 
       if (participanteFinded === null) {
         return res.status(200).json({
@@ -106,6 +106,45 @@ const ParticipanteController = {
       console.error(error);
       return res.status(500).json({
         msg: "Acione o suporte.",
+      });
+    }
+  },
+
+  getAllParticipantes: async (req, res) => {
+    try {
+      const { eventoId } = req.params;
+      const particantesEncontrados = await Partcipante.findAll({
+        where: { eventoid : eventoId },
+        attributes: ["nome", "email", "eventoId"],
+      });
+ 
+      return res.status(200).json({
+        msg: "Participantes encontrados! ",
+        participantes: particantesEncontrados,
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        msg: "Acione o suporte!",
+      });
+    }
+  },
+  getAllParticipants: async(req, res) =>{
+    try {
+      const { id } = req.params;
+      const particantesEncontrados = await Participante.findAll({
+        where: { eventoId : id },
+        attributes: ["nome", "email", "eventoId"],
+      });
+ 
+      return res.status(200).json({
+        msg: "Participantes encontrados! ",
+        participantes: particantesEncontrados,
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        msg: "Acione o suporte!",
       });
     }
   }
