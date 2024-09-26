@@ -8,13 +8,13 @@ app.use('/api', router);
 
 sequelize.authenticate()
 .then(async () => {
-    console.log("Conexão estabelecida com sucesso");
+    console.log("Conexão estabelecida com sucesso!");
     await sequelize.sync();
 })
 .then(() => {
     app.listen(process.env.PORT || 8080, () => {
         console.log("------------");
-        console.log("  Rodando   ");
+        console.log("  Funcionando   ");
         console.log("------------");
     });
 })
@@ -24,7 +24,7 @@ sequelize.authenticate()
 
 app.get('/HealthCheck', (req, res) => {
     return res.status(200).json({
-        msg: "Funcionando",
+        msg: "Funcionando!",
         alive: true
     });
 });

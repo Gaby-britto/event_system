@@ -4,25 +4,25 @@ const ParticipanteController = {
   create: async (req, res) => {
     try {
       const { nome, email, eventoId } = req.body;
- 
+
       console.log(nome, email, eventoId);
- 
+
       const emailsEncontrados = await Participante.findAll({
-        where: { email : email },
+        where: { email: email },
         attributes: ["email"],
       });
-     
+
       if (emailsEncontrados.length > 0) {
         console.log("Email já existente!!");
         return res.status(400).json({ msg: "Email já cadastrado!" });
-    }
- 
+      }
+
       const participantCreated = await Participante.create({
         nome,
         email,
         eventoId,
       });
- 
+
       return res.status(200).json({
         msg: "Participante Criado!",
         participant: participantCreated,
@@ -65,7 +65,7 @@ const ParticipanteController = {
     try {
       const participantes = await Participante.findAll();
       return res.status(200).json({
-        msg: "Participantes encontrados com sucesso",
+        msg: "Participantes encontrados com sucesso:",
         participantes,
       });
     } catch (error) {
@@ -87,7 +87,7 @@ const ParticipanteController = {
       }
 
       res.status(200).json({
-        msg: "Participante encontrado",
+        msg: "Participante encontrado!",
         participante: participanteEncontrado,
       });
     } catch (error) {
@@ -125,10 +125,10 @@ const ParticipanteController = {
     try {
       const { eventoId } = req.params;
       const particantesEncontrados = await Partcipante.findAll({
-        where: { eventoid : eventoId },
+        where: { eventoid: eventoId },
         attributes: ["nome", "email", "eventoId"],
       });
- 
+
       return res.status(200).json({
         msg: "Participantes encontrados! ",
         participantes: particantesEncontrados,
@@ -140,14 +140,14 @@ const ParticipanteController = {
       });
     }
   },
-  getAllParticipants: async(req, res) =>{
+  getAllParticipants: async (req, res) => {
     try {
       const { id } = req.params;
       const particantesEncontrados = await Participante.findAll({
-        where: { eventoId : id },
+        where: { eventoId: id },
         attributes: ["nome", "email", "eventoId"],
       });
- 
+
       return res.status(200).json({
         msg: "Participantes encontrados! ",
         participantes: particantesEncontrados,
@@ -158,7 +158,7 @@ const ParticipanteController = {
         msg: "Acione o suporte!",
       });
     }
-  }
+  },
 };
 
 module.exports = ParticipanteController;
