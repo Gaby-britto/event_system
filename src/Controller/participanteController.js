@@ -4,21 +4,32 @@ const ParticipanteController = {
   create: async (req, res) => {
     try {
       const { nome, email, eventoId } = req.body;
-      const participanteCriado = await Participante.create({
+ 
+      console.log(nome, email, eventoId);
+ 
+      const emailsEncontrados = await Participante.findAll({
+        where: { email : email },
+        attributes: ["email"],
+      });
+     
+      if (emailsEncontrados.length > 0) {
+        console.log("Email já existente!!");
+        return res.status(400).json({ msg: "Email já cadastrado!" });
+    }
+ 
+      const participantCreated = await Participante.create({
         nome,
         email,
         eventoId,
       });
-
+ 
       return res.status(200).json({
-        msg: "Participante criado com sucesso!",
-        participanteCriado,
+        msg: "Participante Criado!",
+        participant: participantCreated,
       });
     } catch (error) {
       console.error(error);
-      return res.status(500).json({
-        msg: "Acione o suporte.",
-      });
+      return res.status(500).json({ msg: "Acione o suporte!" });
     }
   },
   update: async (req, res) => {
